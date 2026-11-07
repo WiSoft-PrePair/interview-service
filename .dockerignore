@@ -4,9 +4,13 @@
 .gitattributes
 .github/
 
-# Gradle 로컬 캐시 / 빌드 산출물 (컨테이너 안에서 다시 생성되므로 불필요)
+# Gradle 로컬 캐시 / 빌드 산출물 (실행 JAR만 포함)
 .gradle/
-build/
+build/*
+!build/libs/
+build/libs/*
+!build/libs/*.jar
+build/libs/*-plain.jar
 out/
 bin/
 HELP.md
@@ -52,7 +56,7 @@ LICENSE
 docs/
 CLAUDE.md
 
-# 테스트 코드 (Dockerfile이 `gradlew build -x test`로 스킵하므로 제외)
+# 테스트 코드
 src/test/
 
 # 로컬 실행 흔적 (데이터/로그)

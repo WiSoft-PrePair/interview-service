@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: prepair-interview-postgres
+    env_file: .env
+    environment:
+      TZ: Asia/Seoul
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  app:
+    image: ghcr.io/wisoft-prepair/interview-service:${IMAGE_TAG:-prod}
+    container_name: prepair-interview-api
+    env_file: .env
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      TZ: Asia/Seoul
+    ports:
+      - "7300:7300"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres-data:

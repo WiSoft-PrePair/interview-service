@@ -1,21 +1,22 @@
+### 기본 설정 (서버·로그) ###
 server:
   port: 7300
 
 logging:
-  pattern:
-    console: "%clr(%d{HH:mm:ss}){faint} %clr([%15.15thread]){magenta} %clr(%-5level){highlight} %clr(%logger{36}){cyan} - %msg%n"
   level:
-    io.wisoft.prepair: DEBUG
+    root: INFO
+    io.wisoft.prepair.interview: ${APP_LOG_LEVEL:INFO}
 
+### Spring Common (애플리케이션·프로필·JSON·파일 업로드·메일) ###
 spring:
   application:
-    name: prepair-backend-java-api
+    name: prepair-interview
 
   profiles:
-    active: local
+    default: local
 
-  config:
-    import: optional:file:.env[.properties]
+  jackson:
+    property-naming-strategy: SNAKE_CASE
 
   servlet:
     multipart:
@@ -34,9 +35,10 @@ spring:
           starttls:
             enable: true
 
+### 외부 서비스 (멤버·OpenAI) ###
 external:
   member-service:
-    url: https://prepair.wisoft.dev
+    url: ${MEMBER_SERVICE_URL}
     api-key: ${MEMBER_SERVICE_API_KEY}
 
   openai:
@@ -46,12 +48,11 @@ external:
     whisper-url: https://api.openai.com/v1/audio/transcriptions
     whisper-model: whisper-1
 
+### AWS (S3·CloudFront) ###
 cloud:
   aws:
     s3:
-      endpoint: ${S3_ENDPOINT}
-      access-key: ${AWS_ACCESS_KEY_ID}
-      secret-key: ${AWS_SECRET_ACCESS_KEY}
-      region: ${AWS_REGION}
-      bucket: prepair
-      presigned-url-expiration: 3600
+      bucket: ${S3_BUCKET}
+      region: ${S3_REGION}
+    cloudfront:
+      media-base-url: https://prepair.woomin.dev

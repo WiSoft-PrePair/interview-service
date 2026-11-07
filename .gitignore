@@ -1,3 +1,4 @@
+# Gradle
 HELP.md
 .gradle
 build/
@@ -5,7 +6,16 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### STS ###
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# STS
 .apt_generated
 .classpath
 .factorypath
@@ -17,29 +27,30 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
+# VS Code
 .vscode/
 
-### Docker ###
+# Environment
 .env
+
+# Database
 postgres-data/
 
+# macOS
+.DS_Store
 
+# AI
 CLAUDE.md
-docs/
+AGENTS.md
+.claude
+.codex
+.agents
+.superpowers
+docs

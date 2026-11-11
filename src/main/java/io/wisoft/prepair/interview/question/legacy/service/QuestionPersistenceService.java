@@ -1,10 +1,10 @@
-package io.wisoft.prepair.interview.question.service;
+package io.wisoft.prepair.interview.question.legacy.service;
 
-import io.wisoft.prepair.interview.question.entity.InterviewQuestion;
+import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
 import io.wisoft.prepair.interview.session.entity.InterviewSession;
-import io.wisoft.prepair.interview.question.entity.QuestionType;
+import io.wisoft.prepair.interview.question.legacy.entity.enums.QuestionType;
 import io.wisoft.prepair.interview.external.openai.dto.QuestionWithTags;
-import io.wisoft.prepair.interview.question.repository.QuestionRepository;
+import io.wisoft.prepair.interview.question.legacy.repository.LegacyQuestionRepository;
 
 import java.util.UUID;
 
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class QuestionPersistenceService {
 
-    private final QuestionRepository questionRepository;
+    private final LegacyQuestionRepository questionRepository;
     private final SessionRepository sessionRepository;
 
     public InterviewQuestion saveTodayQuestion(UUID memberId, QuestionWithTags result) {

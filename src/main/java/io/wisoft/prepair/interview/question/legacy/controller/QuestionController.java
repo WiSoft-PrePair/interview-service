@@ -1,11 +1,11 @@
-package io.wisoft.prepair.interview.question.controller;
+package io.wisoft.prepair.interview.question.legacy.controller;
 
 
-import io.wisoft.prepair.interview.question.dto.VideoInterviewRequest;
-import io.wisoft.prepair.interview.question.dto.QuestionResponse;
-import io.wisoft.prepair.interview.question.entity.QuestionType;
+import io.wisoft.prepair.interview.question.legacy.dto.VideoInterviewRequest;
+import io.wisoft.prepair.interview.question.legacy.dto.QuestionResponse;
+import io.wisoft.prepair.interview.question.legacy.entity.enums.QuestionType;
 import io.wisoft.prepair.interview.common.response.ApiResponse;
-import io.wisoft.prepair.interview.question.service.QuestionService;
+import io.wisoft.prepair.interview.question.legacy.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

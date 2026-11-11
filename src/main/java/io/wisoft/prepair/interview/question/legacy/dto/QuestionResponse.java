@@ -1,10 +1,10 @@
-package io.wisoft.prepair.interview.question.dto;
+package io.wisoft.prepair.interview.question.legacy.dto;
 
-import io.wisoft.prepair.interview.question.entity.InterviewQuestion;
-import io.wisoft.prepair.interview.question.entity.QuestionStatus;
-import io.wisoft.prepair.interview.question.entity.QuestionType;
+import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
+import io.wisoft.prepair.interview.question.entity.enums.QuestionStatus;
+import io.wisoft.prepair.interview.question.legacy.entity.enums.QuestionType;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public record QuestionResponse(
@@ -15,7 +15,7 @@ public record QuestionResponse(
         QuestionStatus status,
         Integer latestScore,
         UUID sessionId,
-        LocalDateTime createdAt
+        Instant createdAt
 ) {
 
     public static QuestionResponse from(InterviewQuestion question) {

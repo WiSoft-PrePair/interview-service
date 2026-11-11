@@ -6,7 +6,7 @@ import io.wisoft.prepair.interview.answer.dto.internal.CombinedFeedbackResult;
 import io.wisoft.prepair.interview.answer.dto.internal.FeedbackResult;
 import io.wisoft.prepair.interview.answer.dto.internal.FinalFeedbackResult;
 import io.wisoft.prepair.interview.answer.dto.internal.FinalFeedbackInput;
-import io.wisoft.prepair.interview.question.entity.InterviewQuestion;
+import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
 import io.wisoft.prepair.interview.external.openai.OpenAiClient;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;

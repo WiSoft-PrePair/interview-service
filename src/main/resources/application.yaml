@@ -35,6 +35,15 @@ spring:
           starttls:
             enable: true
 
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      embedding:
+        model: text-embedding-3-small
+        dimensions: 1536
+      chat:
+        model: gpt-6-luna
+
 ### 외부 서비스 (멤버·OpenAI) ###
 external:
   member-service:

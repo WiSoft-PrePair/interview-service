@@ -1,18 +1,18 @@
-package io.wisoft.prepair.interview.question.service;
+package io.wisoft.prepair.interview.question.legacy.service;
 
-import io.wisoft.prepair.interview.question.dto.VideoInterviewRequest;
-import io.wisoft.prepair.interview.question.dto.QuestionResponse;
-import io.wisoft.prepair.interview.question.entity.InterviewQuestion;
+import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
+import io.wisoft.prepair.interview.question.legacy.dto.VideoInterviewRequest;
+import io.wisoft.prepair.interview.question.legacy.dto.QuestionResponse;
 import io.wisoft.prepair.interview.session.entity.InterviewSession;
-import io.wisoft.prepair.interview.question.entity.QuestionType;
+import io.wisoft.prepair.interview.question.legacy.entity.enums.QuestionType;
 import io.wisoft.prepair.interview.external.member.MemberServiceClient;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
-import io.wisoft.prepair.interview.external.member.dto.MemberSchedulerInfo;
+import io.wisoft.prepair.interview.external.member.dto.MemberProfile;
 import io.wisoft.prepair.interview.external.openai.OpenAiClient;
 import io.wisoft.prepair.interview.external.openai.dto.QuestionWithTags;
-import io.wisoft.prepair.interview.prompt.QuestionPromptBuilder;
-import io.wisoft.prepair.interview.question.repository.QuestionRepository;
+import io.wisoft.prepair.interview.question.legacy.prompt.QuestionPromptBuilder;
+import io.wisoft.prepair.interview.question.legacy.repository.LegacyQuestionRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ import java.util.UUID;
 public class QuestionService {
 
     private final QuestionPersistenceService questionPersistService;
-    private final QuestionRepository questionRepository;
+    private final LegacyQuestionRepository questionRepository;
     private final MemberServiceClient memberServiceClient;
     private final OpenAiClient openAiClient;
     private final QuestionPromptBuilder promptBuilder;
@@ -51,7 +51,7 @@ public class QuestionService {
 
     @Transactional
     public List<QuestionResponse> generateVideoQuestions(UUID memberId, VideoInterviewRequest request) {
-        MemberSchedulerInfo member = memberServiceClient.getMember(memberId);
+        MemberProfile member = memberServiceClient.getMember(memberId);
         String prompt = promptBuilder.buildVideoQuestionPrompt(member.job(), request.count());
 
         List<QuestionWithTags> aiQuestions = openAiClient.generateQuestions(prompt);

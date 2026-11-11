@@ -1,6 +1,6 @@
-package io.wisoft.prepair.interview.prompt;
+package io.wisoft.prepair.interview.question.legacy.prompt;
 
-import io.wisoft.prepair.interview.question.entity.InterviewQuestion;
+import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

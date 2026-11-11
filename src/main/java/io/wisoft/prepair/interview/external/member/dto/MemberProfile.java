@@ -6,7 +6,7 @@ import io.wisoft.prepair.interview.external.member.enums.Notification;
 import java.util.List;
 import java.util.UUID;
 
-public record MemberSchedulerInfo(
+public record MemberProfile(
         UUID id,
         String email,
         String job,

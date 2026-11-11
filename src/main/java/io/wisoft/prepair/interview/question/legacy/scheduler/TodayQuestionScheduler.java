@@ -1,6 +1,6 @@
-package io.wisoft.prepair.interview.scheduler;
+package io.wisoft.prepair.interview.question.legacy.scheduler;
 
-import io.wisoft.prepair.interview.question.service.TodayQuestionService;
+import io.wisoft.prepair.interview.question.legacy.service.TodayQuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;

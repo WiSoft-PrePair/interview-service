@@ -3,7 +3,7 @@ package io.wisoft.prepair.interview.session.dto.response;
 import io.wisoft.prepair.interview.session.entity.InterviewSession;
 import io.wisoft.prepair.interview.session.entity.SessionStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public record SessionResponse(
@@ -11,7 +11,7 @@ public record SessionResponse(
         SessionStatus status,
         Integer finalScore,
         int totalQuestionCount,
-        LocalDateTime createdAt
+        Instant createdAt
 ) {
     public static SessionResponse from(InterviewSession session) {
         return new SessionResponse(

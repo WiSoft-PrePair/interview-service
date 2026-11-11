@@ -1,12 +1,12 @@
-package io.wisoft.prepair.interview.question.service;
+package io.wisoft.prepair.interview.question.legacy.service;
 
+import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
 import io.wisoft.prepair.interview.external.member.MemberServiceClient;
-import io.wisoft.prepair.interview.external.member.dto.MemberSchedulerInfo;
+import io.wisoft.prepair.interview.external.member.dto.MemberProfile;
 import io.wisoft.prepair.interview.external.openai.OpenAiClient;
 import io.wisoft.prepair.interview.external.openai.dto.QuestionWithTags;
-import io.wisoft.prepair.interview.prompt.QuestionPromptBuilder;
-import io.wisoft.prepair.interview.question.entity.InterviewQuestion;
-import io.wisoft.prepair.interview.question.repository.QuestionRepository;
+import io.wisoft.prepair.interview.question.legacy.prompt.QuestionPromptBuilder;
+import io.wisoft.prepair.interview.question.legacy.repository.LegacyQuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,16 +23,16 @@ public class TodayQuestionService {
 
     private final QuestionPersistenceService questionPersistenceService;
     private final QuestionNotificationService questionNotificationService;
-    private final QuestionRepository questionRepository;
+    private final LegacyQuestionRepository questionRepository;
     private final MemberServiceClient memberServiceClient;
     private final OpenAiClient openAiClient;
     private final QuestionPromptBuilder promptBuilder;
 
     public void sendTodayQuestions() {
-        List<MemberSchedulerInfo> members = memberServiceClient.getMembers();
+        List<MemberProfile> members = memberServiceClient.getMembers();
         DayOfWeek today = LocalDate.now(ZoneId.of("Asia/Seoul")).getDayOfWeek();
 
-        List<MemberSchedulerInfo> targetMembers = members.stream()
+        List<MemberProfile> targetMembers = members.stream()
                 .filter(this::isValidFrequency)
                 .filter(this::isValidJob)
                 .filter(this::isValidNotification)
@@ -43,7 +43,7 @@ public class TodayQuestionService {
         targetMembers.forEach(this::generateAndSend);
     }
 
-    private void generateAndSend(MemberSchedulerInfo member) {
+    private void generateAndSend(MemberProfile member) {
         try {
             List<InterviewQuestion> previousQuestions = questionRepository.findByMemberId(member.id());
             String prompt = promptBuilder.buildDailyQuestionPrompt(member.job(), previousQuestions);
@@ -59,7 +59,7 @@ public class TodayQuestionService {
         }
     }
 
-    private boolean isValidFrequency(MemberSchedulerInfo member) {
+    private boolean isValidFrequency(MemberProfile member) {
         if (member.frequency() == null) {
             log.warn("멤버 스킵 | memberId={} | reason=no_frequency", member.id());
             return false;
@@ -67,7 +67,7 @@ public class TodayQuestionService {
         return true;
     }
 
-    private boolean isValidJob(MemberSchedulerInfo member) {
+    private boolean isValidJob(MemberProfile member) {
         if (member.job() == null || member.job().isBlank()) {
             log.warn("멤버 스킵 | memberId={} | reason=no_job", member.id());
             return false;
@@ -75,7 +75,7 @@ public class TodayQuestionService {
         return true;
     }
 
-    private boolean isValidNotification(MemberSchedulerInfo member) {
+    private boolean isValidNotification(MemberProfile member) {
         if (member.notification() == null) {
             log.warn("멤버 스킵 | memberId={} | reason=no_notification", member.id());
             return false;
@@ -83,7 +83,7 @@ public class TodayQuestionService {
         return true;
     }
 
-    private boolean shouldSendToday(MemberSchedulerInfo member, DayOfWeek today) {
+    private boolean shouldSendToday(MemberProfile member, DayOfWeek today) {
         return switch (member.frequency()) {
             case EVERY -> true;
             case WEEKLY -> today == DayOfWeek.MONDAY;

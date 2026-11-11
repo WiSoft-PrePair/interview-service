@@ -1,7 +1,7 @@
-package io.wisoft.prepair.interview.question.entity;
+package io.wisoft.prepair.interview.question.legacy.entity;
 
-import io.wisoft.prepair.interview.question.entity.QuestionStatus;
-import io.wisoft.prepair.interview.question.entity.QuestionType;
+import io.wisoft.prepair.interview.question.entity.enums.QuestionStatus;
+import io.wisoft.prepair.interview.question.legacy.entity.enums.QuestionType;
 import io.wisoft.prepair.interview.common.support.BaseTimeEntity;
 import io.wisoft.prepair.interview.session.entity.InterviewSession;
 import jakarta.persistence.Column;

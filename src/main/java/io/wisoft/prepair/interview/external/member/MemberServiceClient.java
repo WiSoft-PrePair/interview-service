@@ -1,6 +1,6 @@
 package io.wisoft.prepair.interview.external.member;
 
-import io.wisoft.prepair.interview.external.member.dto.MemberSchedulerInfo;
+import io.wisoft.prepair.interview.external.member.dto.MemberProfile;
 import io.wisoft.prepair.interview.external.member.dto.MembersData;
 import io.wisoft.prepair.interview.external.member.dto.MemberServiceResponse;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
@@ -34,7 +34,7 @@ public class MemberServiceClient {
     @Value("${external.member-service.api-key}")
     private String apiKey;
 
-    public List<MemberSchedulerInfo> getMembers() {
+    public List<MemberProfile> getMembers() {
         try {
             String url = memberServiceUrl + "/api/members/all";
 
@@ -88,11 +88,11 @@ public class MemberServiceClient {
         }
     }
 
-    public MemberSchedulerInfo getMember(UUID memberId) {
+    public MemberProfile getMember(UUID memberId) {
         try {
             String url = memberServiceUrl + "/api/members/" + memberId;
 
-            MemberServiceResponse<MemberSchedulerInfo> response = restClient.get()
+            MemberServiceResponse<MemberProfile> response = restClient.get()
                     .uri(url)
                     .header("x-api-prepair", apiKey)
                     .retrieve()

@@ -1,5 +1,6 @@
 package io.wisoft.prepair.interview.answer.event;
 
+import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
 import io.wisoft.prepair.interview.external.storage.S3FileStorage;
@@ -10,8 +11,7 @@ import io.wisoft.prepair.interview.answer.service.AnswerPersistenceService;
 import io.wisoft.prepair.interview.answer.service.FeedbackGenerator;
 import io.wisoft.prepair.interview.answer.service.SpeechToTextService;
 import io.wisoft.prepair.interview.answer.service.VideoFrameAnalysisService;
-import io.wisoft.prepair.interview.question.entity.InterviewQuestion;
-import io.wisoft.prepair.interview.question.repository.QuestionRepository;
+import io.wisoft.prepair.interview.question.legacy.repository.LegacyQuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -28,7 +28,7 @@ public class VideoAnswerProcessor {
     private final AnswerPersistenceService answerPersistenceService;
     private final SpeechToTextService speechToTextService;
     private final VideoFrameAnalysisService videoAnalysisService;
-    private final QuestionRepository questionRepository;
+    private final LegacyQuestionRepository questionRepository;
     private final S3FileStorage s3FileStorage;
     private final FeedbackGenerator feedbackGenerator;
     private final AnalysisCompletionTracker completionTracker;

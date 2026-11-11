@@ -1,5 +1,6 @@
 package io.wisoft.prepair.interview.answer.service;
 
+import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wisoft.prepair.interview.answer.dto.internal.AnswerSubmitResult;
@@ -8,18 +9,18 @@ import io.wisoft.prepair.interview.answer.dto.internal.FeedbackResult;
 import io.wisoft.prepair.interview.answer.dto.internal.FeedbackDetail;
 import io.wisoft.prepair.interview.answer.entity.InterviewAnswer;
 import io.wisoft.prepair.interview.answer.entity.InterviewFeedback;
-import io.wisoft.prepair.interview.question.entity.InterviewQuestion;
 import io.wisoft.prepair.interview.answer.entity.AnswerType;
 import io.wisoft.prepair.interview.answer.entity.FeedbackType;
-import io.wisoft.prepair.interview.question.entity.QuestionStatus;
+import io.wisoft.prepair.interview.question.entity.enums.QuestionStatus;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
 import io.wisoft.prepair.interview.answer.repository.AnswerRepository;
 import io.wisoft.prepair.interview.answer.repository.FeedbackRepository;
-import io.wisoft.prepair.interview.question.repository.QuestionRepository;
+import io.wisoft.prepair.interview.question.legacy.repository.LegacyQuestionRepository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AnswerPersistenceService {
 
-    private final QuestionRepository questionRepository;
+    private final LegacyQuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final FeedbackRepository feedbackRepository;
     private final ObjectMapper objectMapper;
@@ -97,8 +98,10 @@ public class AnswerPersistenceService {
     }
 
     private boolean isFirstTodayAnswer(final UUID questionId, final Integer score) {
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = startOfDay.plusDays(1);
+        ZoneId zone = ZoneId.of("Asia/Seoul");
+        LocalDate today = LocalDate.now(zone);
+        Instant startOfDay = today.atStartOfDay(zone).toInstant();
+        Instant endOfDay = today.plusDays(1).atStartOfDay(zone).toInstant();
         return questionRepository.updateLatestScoreIfFirstTime(questionId, score, startOfDay, endOfDay) > 0;
     }
 

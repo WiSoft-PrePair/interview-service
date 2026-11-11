@@ -1,4 +1,4 @@
-package io.wisoft.prepair.interview.question.dto;
+package io.wisoft.prepair.interview.question.legacy.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

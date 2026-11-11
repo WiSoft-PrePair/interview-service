@@ -3,10 +3,7 @@ package io.wisoft.prepair.interview.external.openai;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.wisoft.prepair.interview.external.openai.dto.OpenAiRequest;
-import io.wisoft.prepair.interview.external.openai.dto.OpenAiResponse;
-import io.wisoft.prepair.interview.external.openai.dto.QuestionWithTags;
-import io.wisoft.prepair.interview.external.openai.dto.VideoRequest;
+import io.wisoft.prepair.interview.external.openai.dto.*;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
 

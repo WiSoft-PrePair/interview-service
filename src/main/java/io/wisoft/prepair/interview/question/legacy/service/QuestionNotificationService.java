@@ -1,10 +1,10 @@
-package io.wisoft.prepair.interview.question.service;
+package io.wisoft.prepair.interview.question.legacy.service;
 
-import io.wisoft.prepair.interview.external.member.dto.MemberSchedulerInfo;
+import io.wisoft.prepair.interview.external.member.dto.MemberProfile;
 import io.wisoft.prepair.interview.external.member.enums.Notification;
 import io.wisoft.prepair.interview.external.notification.email.EmailService;
 import io.wisoft.prepair.interview.external.notification.kakao.KakaoService;
-import io.wisoft.prepair.interview.question.entity.InterviewQuestion;
+import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class QuestionNotificationService {
     private final EmailService emailService;
     private final KakaoService kakaoService;
 
-    public void notifyMember(MemberSchedulerInfo member, InterviewQuestion question) {
+    public void notifyMember(MemberProfile member, InterviewQuestion question) {
         Notification notification = member.notification();
 
         if (notification == Notification.EMAIL || notification == Notification.BOTH) {
@@ -30,7 +30,7 @@ public class QuestionNotificationService {
         }
     }
 
-    private void sendEmail(MemberSchedulerInfo member, InterviewQuestion question) {
+    private void sendEmail(MemberProfile member, InterviewQuestion question) {
         try {
             emailService.send(
                     member.email(),
@@ -44,7 +44,7 @@ public class QuestionNotificationService {
         }
     }
 
-    private void sendKakao(MemberSchedulerInfo member, InterviewQuestion question) {
+    private void sendKakao(MemberProfile member, InterviewQuestion question) {
         if (member.kakaoAccessToken() == null || member.kakaoAccessToken().isBlank()) {
             log.warn("멤버 스킵 | memberId={} | reason=no_kakao_token", member.id());
             return;

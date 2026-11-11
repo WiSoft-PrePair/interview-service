@@ -4,7 +4,7 @@ import io.wisoft.prepair.interview.answer.dto.internal.FeedbackDetail;
 import io.wisoft.prepair.interview.answer.entity.InterviewFeedback;
 import io.wisoft.prepair.interview.answer.entity.FeedbackType;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public record FeedbackResponse(
@@ -13,7 +13,7 @@ public record FeedbackResponse(
         FeedbackDetail feedback,
         FeedbackType feedbackType,
         Integer score,
-        LocalDateTime createdAt
+        Instant createdAt
 ) {
 
     public static FeedbackResponse from(InterviewFeedback f, FeedbackDetail detail) {

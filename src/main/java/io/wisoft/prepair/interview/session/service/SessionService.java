@@ -1,5 +1,6 @@
 package io.wisoft.prepair.interview.session.service;
 
+import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
 import io.wisoft.prepair.interview.answer.entity.FeedbackType;
@@ -7,8 +8,7 @@ import io.wisoft.prepair.interview.answer.entity.InterviewAnswer;
 import io.wisoft.prepair.interview.answer.entity.InterviewFeedback;
 import io.wisoft.prepair.interview.answer.repository.AnswerRepository;
 import io.wisoft.prepair.interview.answer.repository.FeedbackRepository;
-import io.wisoft.prepair.interview.question.entity.InterviewQuestion;
-import io.wisoft.prepair.interview.question.repository.QuestionRepository;
+import io.wisoft.prepair.interview.question.legacy.repository.LegacyQuestionRepository;
 import io.wisoft.prepair.interview.session.dto.response.CreateSessionResponse;
 import io.wisoft.prepair.interview.session.dto.response.SessionDetailResponse;
 import io.wisoft.prepair.interview.session.dto.response.SessionResponse;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class SessionService {
 
     private final SessionRepository sessionRepository;
-    private final QuestionRepository questionRepository;
+    private final LegacyQuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final FeedbackRepository feedbackRepository;
 

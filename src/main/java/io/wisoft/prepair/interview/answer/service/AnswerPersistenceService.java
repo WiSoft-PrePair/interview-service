@@ -1,6 +1,6 @@
 package io.wisoft.prepair.interview.answer.service;
 
-import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
+import io.wisoft.prepair.interview.legacy.entity.InterviewQuestion;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wisoft.prepair.interview.answer.dto.internal.AnswerSubmitResult;
@@ -16,7 +16,7 @@ import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
 import io.wisoft.prepair.interview.answer.repository.AnswerRepository;
 import io.wisoft.prepair.interview.answer.repository.FeedbackRepository;
-import io.wisoft.prepair.interview.question.legacy.repository.LegacyQuestionRepository;
+import io.wisoft.prepair.interview.legacy.repository.LegacyQuestionRepository;
 
 import java.time.LocalDate;
 import java.time.Instant;

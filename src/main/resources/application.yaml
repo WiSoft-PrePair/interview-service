@@ -7,7 +7,7 @@ logging:
     root: INFO
     io.wisoft.prepair.interview: ${APP_LOG_LEVEL:INFO}
 
-### Spring Common (애플리케이션·프로필·JSON·파일 업로드·메일) ###
+### Spring Common (애플리케이션·프로필·JSON·파일 업로드) ###
 spring:
   application:
     name: prepair-interview
@@ -22,18 +22,6 @@ spring:
     multipart:
       max-file-size: 150MB
       max-request-size: 155MB
-
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${GMAIL_USERNAME}
-    password: ${GMAIL_APP_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
 
   ai:
     openai:

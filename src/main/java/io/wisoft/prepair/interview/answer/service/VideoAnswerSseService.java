@@ -1,10 +1,10 @@
 package io.wisoft.prepair.interview.answer.service;
 
-import io.wisoft.prepair.interview.session.entity.InterviewSession;
+import io.wisoft.prepair.interview.legacy.session.entity.InterviewSession;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
 import io.wisoft.prepair.interview.common.support.SseEmitterManager;
-import io.wisoft.prepair.interview.session.repository.SessionRepository;
+import io.wisoft.prepair.interview.legacy.session.repository.SessionRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

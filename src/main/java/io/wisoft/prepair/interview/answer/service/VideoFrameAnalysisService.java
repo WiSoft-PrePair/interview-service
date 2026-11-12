@@ -6,7 +6,7 @@ import io.wisoft.prepair.interview.answer.dto.internal.FeedbackResult;
 import io.wisoft.prepair.interview.external.openai.OpenAiClient;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
-import io.wisoft.prepair.interview.prompt.VideoAnalysisPromptBuilder;
+import io.wisoft.prepair.interview.legacy.prompt.VideoAnalysisPromptBuilder;
 
 import java.nio.file.Path;
 import java.util.List;

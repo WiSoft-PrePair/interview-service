@@ -7,12 +7,12 @@ import io.wisoft.prepair.interview.legacy.session.dto.response.SessionResponse;
 import io.wisoft.prepair.interview.legacy.session.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -26,40 +26,42 @@ public class SessionController {
     private final SessionService sessionService;
 
     @GetMapping
-    public ApiResponse<List<SessionResponse>> getSessions(
+    public ResponseEntity<ApiResponse<List<SessionResponse>>> getSessions(
             @RequestHeader("X-User-Id") UUID memberId
     ) {
         List<SessionResponse> data = sessionService.getSessionsByMember(memberId);
-        return ApiResponse.ok(data, "세션 목록을 조회했습니다.");
+        ApiResponse<List<SessionResponse>> response = ApiResponse.of(data, "세션 목록을 조회했습니다.");
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{sessionId}")
-    public ApiResponse<SessionDetailResponse> getSession(
+    public ResponseEntity<ApiResponse<SessionDetailResponse>> getSession(
             @PathVariable UUID sessionId,
             @RequestHeader("X-User-Id") UUID memberId
     ) {
         SessionDetailResponse data = sessionService.getSessionDetail(sessionId, memberId);
-        return ApiResponse.ok(data, "세션 결과를 조회했습니다.");
+        ApiResponse<SessionDetailResponse> response = ApiResponse.of(data, "세션 결과를 조회했습니다.");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{sessionId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<CreateSessionResponse> createSession(
+    public ResponseEntity<ApiResponse<CreateSessionResponse>> createSession(
             @PathVariable UUID sessionId,
             @RequestHeader("X-User-Id") UUID memberId
     ) {
         CreateSessionResponse data = sessionService.createSession(sessionId, memberId);
-        return ApiResponse.created(data, "세션이 생성되었습니다.");
+        ApiResponse<CreateSessionResponse> response = ApiResponse.of(data, "세션이 생성되었습니다.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/{sessionId}/questions/{questionId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<CreateSessionResponse> createQuestion(
+    public ResponseEntity<ApiResponse<CreateSessionResponse>> createQuestion(
             @PathVariable UUID sessionId,
             @PathVariable UUID questionId,
             @RequestHeader("X-User-Id") UUID memberId
     ) {
         CreateSessionResponse data = sessionService.createQuestion(sessionId, questionId, memberId);
-        return ApiResponse.created(data, "세션이 생성되었습니다.");
+        ApiResponse<CreateSessionResponse> response = ApiResponse.of(data, "세션이 생성되었습니다.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

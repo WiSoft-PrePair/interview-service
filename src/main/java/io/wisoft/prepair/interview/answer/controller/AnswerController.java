@@ -12,6 +12,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -25,25 +26,25 @@ public class AnswerController {
     private final VideoAnswerSseService videoAnswerStreamService;
 
     @PostMapping("/{questionId}/answers")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<FeedbackResponse> submitAnswer(
+    public ResponseEntity<ApiResponse<FeedbackResponse>> submitAnswer(
             @PathVariable UUID questionId,
             @RequestHeader("X-User-Id") UUID memberId,
             @RequestBody @Valid AnswerRequest request
     ) {
         FeedbackResponse data = answerService.submitAnswer(questionId, memberId, request.answer());
-        return ApiResponse.created(data, "답변이 제출되었습니다.");
+        ApiResponse<FeedbackResponse> response = ApiResponse.of(data, "답변이 제출되었습니다.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping(value = "/{questionId}/video-answers", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ApiResponse<Void> submitVideoAnswer(
+    public ResponseEntity<ApiResponse<Void>> submitVideoAnswer(
             @PathVariable UUID questionId,
             @RequestHeader("X-User-Id") UUID memberId,
             @RequestPart("video") MultipartFile video
     ) {
         answerService.submitVideoAnswer(questionId, memberId, video);
-        return ApiResponse.accepted(null, "영상 답변이 제출되었습니다.");
+        ApiResponse<Void> response = ApiResponse.of(null, "영상 답변이 제출되었습니다.");
+        return ResponseEntity.accepted().body(response);
     }
 
     @GetMapping(value = "/video-answers/{sessionId}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

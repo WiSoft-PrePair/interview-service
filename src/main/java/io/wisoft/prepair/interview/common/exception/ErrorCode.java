@@ -45,7 +45,10 @@ public enum ErrorCode {
     VIDEO_CONVERSION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "영상 변환에 실패했습니다."),
 
     // 파일 업로드
-    VIDEO_FILE_TOO_LARGE(HttpStatus.CONTENT_TOO_LARGE, "파일 크기가 제한을 초과했습니다. (최대 150MB)");
+    VIDEO_FILE_TOO_LARGE(HttpStatus.CONTENT_TOO_LARGE, "파일 크기가 제한을 초과했습니다. (최대 150MB)"),
+
+    // 직무
+    JOB_MATCH_NOT_FOUND(HttpStatus.NOT_FOUND, "회원의 직무 매핑을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

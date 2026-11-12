@@ -1,8 +1,7 @@
 package io.wisoft.prepair.interview.question.controller;
 
 import io.wisoft.prepair.interview.question.scheduler.QuestionPoolScheduler;
-import io.wisoft.prepair.interview.question.service.job.JobMatcher;
-import io.wisoft.prepair.interview.question.service.QuestionPoolGenerator;
+import io.wisoft.prepair.interview.question.scheduler.QuestionScheduler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
@@ -14,17 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 @Profile("local")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/local/question-pool")
-public class QuestionPoolTestController {
+@RequestMapping("/test")
+public class QuestionTestController {
 
     private final QuestionPoolScheduler poolScheduler;
+    private final QuestionScheduler questionScheduler;
 
-    private final QuestionPoolGenerator poolGenerator;
-    private final JobMatcher jobMatcher;
-
-    @PostMapping
+    @PostMapping("/question-pool")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void prepare() {
         poolScheduler.prepare();
+    }
+
+    @PostMapping("/question-assign")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void assign() {
+        questionScheduler.assign();
     }
 }

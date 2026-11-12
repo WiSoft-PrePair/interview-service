@@ -1,6 +1,6 @@
 package io.wisoft.prepair.interview.answer.service;
 
-import io.wisoft.prepair.interview.question.legacy.entity.InterviewQuestion;
+import io.wisoft.prepair.interview.legacy.entity.InterviewQuestion;
 import io.wisoft.prepair.interview.answer.dto.internal.AnswerSubmitResult;
 import io.wisoft.prepair.interview.answer.dto.internal.FeedbackResult;
 import io.wisoft.prepair.interview.answer.dto.internal.FeedbackDetail;
@@ -10,7 +10,7 @@ import io.wisoft.prepair.interview.external.member.MemberServiceClient;
 import io.wisoft.prepair.interview.external.storage.LocalFileStorage;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
-import io.wisoft.prepair.interview.question.legacy.repository.LegacyQuestionRepository;
+import io.wisoft.prepair.interview.legacy.repository.LegacyQuestionRepository;
 import io.wisoft.prepair.interview.answer.event.AnalysisCompletionTracker;
 import io.wisoft.prepair.interview.answer.event.VideoAnswerProcessor;
 import java.nio.file.Path;

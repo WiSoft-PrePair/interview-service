@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -17,6 +18,11 @@ import java.util.UUID;
                 @UniqueConstraint(
                         name = "uk_question_member_pool",
                         columnNames = {"member_id", "question_pool_id"}
+                ),
+
+                @UniqueConstraint(
+                        name = "uk_question_member_assigned_date",
+                        columnNames = {"member_id", "assigned_date"}
                 )
         }
 )
@@ -45,10 +51,14 @@ public class Question extends BaseTimeEntity {
     @Column(nullable = false)
     private QuestionStatus status = QuestionStatus.UNANSWERED;
 
-    public Question(UUID memberId, QuestionPool questionPool) {
+    @Column(name = "assigned_date", nullable = false)
+    private LocalDate assignedDate;
+
+    public Question(UUID memberId, QuestionPool questionPool, LocalDate assignedDate) {
         this.memberId = memberId;
         this.questionPool = questionPool;
         this.question = questionPool.getQuestion();
         this.questionTag = questionPool.getQuestionTag();
+        this.assignedDate = assignedDate;
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface QuestionPoolRepository extends JpaRepository<QuestionPool, UUID> {
@@ -44,4 +45,19 @@ public interface QuestionPoolRepository extends JpaRepository<QuestionPool, UUID
                                    @Param("embedding") float[] embedding,
                                    @Param("minSimilarity") double minSimilarity,
                                    @Param("candidateLimit") int candidateLimit);
+
+    @Query("""
+            SELECT pool
+            FROM QuestionPool pool
+            WHERE pool.job.id = :jobId
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM Question q
+                    WHERE q.memberId = :memberId
+                        AND q.questionPool.id = pool.id)
+            ORDER BY function('random')
+            LIMIT 1
+            """)
+    Optional<QuestionPool> pickUnassigned(@Param("jobId") UUID jobId,
+                                          @Param("memberId") UUID memberId);
 }

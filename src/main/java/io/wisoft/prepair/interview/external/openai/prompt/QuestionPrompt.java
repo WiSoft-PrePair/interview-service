@@ -19,6 +19,7 @@ public class QuestionPrompt {
                   COLLABORATION: 협업과 의사소통
                   EXPERIENCE: 경험과 배운 점
                   CULTURE_FIT: 업무 가치관과 일하는 방식
+                  AI: AI 도구 활용과 AI와 함께 일하는 방식 (AI 기술 지식 자체는 JOB)
                 - 모든 분류에서 해당 직무의 맥락을 반영하세요.
                 - 특정 회사나 경력을 임의로 가정하지 마세요.
                 """;

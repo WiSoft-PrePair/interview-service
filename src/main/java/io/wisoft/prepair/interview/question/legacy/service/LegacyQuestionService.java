@@ -27,7 +27,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class QuestionService {
+public class LegacyQuestionService {
 
     private final QuestionPersistenceService questionPersistService;
     private final LegacyQuestionRepository questionRepository;

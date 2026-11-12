@@ -5,7 +5,7 @@ import io.wisoft.prepair.interview.question.legacy.dto.VideoInterviewRequest;
 import io.wisoft.prepair.interview.question.legacy.dto.QuestionResponse;
 import io.wisoft.prepair.interview.question.legacy.entity.enums.QuestionType;
 import io.wisoft.prepair.interview.common.response.ApiResponse;
-import io.wisoft.prepair.interview.question.legacy.service.QuestionService;
+import io.wisoft.prepair.interview.question.legacy.service.LegacyQuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @RequestMapping("/api/interviews/questions")
 public class QuestionController {
 
-    private final QuestionService questionService;
+    private final LegacyQuestionService questionService;
 
     @GetMapping
     public ApiResponse<List<QuestionResponse>> getQuestions(

@@ -33,7 +33,7 @@ public class QuestionPoolGenerator {
     private final OpenAiEmbeddingClient embeddingClient;
 
     private final QuestionPoolReader poolReader;
-    private final QuestionPoolService poolService;
+    private final QuestionPoolWriter poolWriter;
     private final JobReader jobReader;
 
     public void execute() {
@@ -51,7 +51,7 @@ public class QuestionPoolGenerator {
                 List<ComparisonQuestion> comparisons = getComparisons(job, questions, embeddings);
                 Set<Integer> duplicateIndexes = compareQuestions(comparisons);
 
-                poolService.save(job, questions, embeddings, duplicateIndexes);
+                poolWriter.save(job, questions, embeddings, duplicateIndexes);
 
             } catch (Exception e) {
                 log.error("질문 풀 보충 실패: jobId={}", job.getId(), e);

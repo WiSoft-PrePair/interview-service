@@ -19,7 +19,7 @@ import java.util.UUID;
 public class QuestionAssigner {
 
     private final MemberServiceClient memberClient;
-    private final QuestionService questionService;
+    private final QuestionWriter questionWriter;
     private final QuestionReader questionReader;
     private final JobMatchReader jobMatchReader;
     private final QuestionPoolReader poolReader;
@@ -45,7 +45,7 @@ public class QuestionAssigner {
         //
         poolReader.pickUnassigned(job.getId(), memberId)
                 .ifPresentOrElse(
-                        pool -> questionService.save(memberId, pool, today),
+                        pool -> questionWriter.save(memberId, pool, today),
                         () -> log.warn("질문 배정 후보 없음: memberId={}, jobId={}", memberId, job.getId())
                 );
     }

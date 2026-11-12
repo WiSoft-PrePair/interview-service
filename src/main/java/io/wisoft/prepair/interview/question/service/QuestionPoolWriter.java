@@ -5,18 +5,18 @@ import io.wisoft.prepair.interview.question.entity.Job;
 import io.wisoft.prepair.interview.question.entity.QuestionPool;
 import io.wisoft.prepair.interview.question.repository.QuestionPoolRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-@Service
+@Component
+@Transactional
 @RequiredArgsConstructor
-public class QuestionPoolService {
+public class QuestionPoolWriter {
 
     private final QuestionPoolRepository poolRepository;
 
-    @Transactional
     public void save(Job job, List<GeneratedQuestion> questions, List<float[]> embeddings, Set<Integer> duplicateIndexes) {
         List<QuestionPool> pools = new ArrayList<>();
 

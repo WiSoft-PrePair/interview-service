@@ -1,7 +1,7 @@
 package io.wisoft.prepair.interview.legacy.session.notifier;
 
 import io.wisoft.prepair.interview.common.support.SseEmitterManager;
-import io.wisoft.prepair.interview.answer.dto.response.FinalFeedbackResponse;
+import io.wisoft.prepair.interview.legacy.answer.dto.response.FinalFeedbackResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

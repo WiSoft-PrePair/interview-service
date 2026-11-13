@@ -2,15 +2,19 @@ package io.wisoft.prepair.interview.question.repository;
 
 import io.wisoft.prepair.interview.question.dto.TagCount;
 import io.wisoft.prepair.interview.question.entity.Question;
+import io.wisoft.prepair.interview.question.entity.enums.QuestionStatus;
 import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface QuestionRepository extends JpaRepository<Question, UUID> {
@@ -46,4 +50,29 @@ public interface QuestionRepository extends JpaRepository<Question, UUID> {
             GROUP BY q.questionTag
             """)
     List<TagCount> countByTag(@Param("memberId") UUID memberId);
+
+    @Query("""
+            SELECT q
+            FROM Question q
+            WHERE q.id = :questionId
+                AND q.memberId = :memberId
+            """)
+    Optional<Question> findOwned(@Param("questionId") UUID questionId,
+                                 @Param("memberId") UUID memberId);
+
+    @Modifying
+    @Query("""
+            UPDATE Question q
+            SET q.status = :answered,
+                q.bestScore = CASE
+                    WHEN q.bestScore IS NULL OR q.bestScore < :score THEN :score
+                    ELSE q.bestScore
+                END,
+                q.updatedAt = :now
+            WHERE q.id = :questionId
+            """)
+    void answered(@Param("questionId") UUID questionId,
+                  @Param("answered") QuestionStatus answered,
+                  @Param("score") Integer score,
+                  @Param("now") Instant now);
 }

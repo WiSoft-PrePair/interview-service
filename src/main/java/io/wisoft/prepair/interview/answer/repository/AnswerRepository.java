@@ -1,24 +1,30 @@
 package io.wisoft.prepair.interview.answer.repository;
 
-import io.wisoft.prepair.interview.answer.entity.InterviewAnswer;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import io.wisoft.prepair.interview.answer.entity.Answer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface AnswerRepository extends JpaRepository<InterviewAnswer, UUID> {
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-    @Query("SELECT a FROM InterviewAnswer a " +
-            "JOIN FETCH a.interviewQuestion q " +
-            "JOIN FETCH q.interviewSession " +
-            "WHERE a.id = :answerId")
-    Optional<InterviewAnswer> findByIdWithQuestionAndSession(UUID answerId);
+public interface AnswerRepository extends JpaRepository<Answer, UUID> {
 
-    @Query("SELECT a FROM InterviewAnswer a " +
-            "JOIN FETCH a.interviewQuestion q " +
-            "WHERE q.interviewSession.id = :sessionId")
-    List<InterviewAnswer> findBySessionId(@Param("sessionId") UUID sessionId);
+    @Query("""
+            SELECT a
+            FROM Answer a
+            WHERE a.question.id = :questionId
+            ORDER BY a.createdAt DESC
+            """)
+    List<Answer> findHistory(@Param("questionId") UUID questionId);
+
+    @Query("""
+            SELECT a
+            FROM Answer a
+            WHERE a.id = :answerId
+                AND a.question.memberId = :memberId
+            """)
+    Optional<Answer> findOwned(@Param("answerId") UUID answerId,
+                               @Param("memberId") UUID memberId);
 }

@@ -1,0 +1,122 @@
+package io.wisoft.prepair.interview.legacy.answer.service;
+
+import io.wisoft.prepair.interview.legacy.entity.InterviewQuestion;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.wisoft.prepair.interview.legacy.answer.dto.internal.AnswerSubmitResult;
+import io.wisoft.prepair.interview.legacy.answer.dto.internal.CombinedFeedbackResult;
+import io.wisoft.prepair.interview.legacy.answer.dto.internal.FeedbackResult;
+import io.wisoft.prepair.interview.legacy.answer.dto.internal.FeedbackDetail;
+import io.wisoft.prepair.interview.legacy.answer.entity.InterviewAnswer;
+import io.wisoft.prepair.interview.legacy.answer.entity.InterviewFeedback;
+import io.wisoft.prepair.interview.legacy.answer.entity.AnswerType;
+import io.wisoft.prepair.interview.legacy.answer.entity.FeedbackType;
+import io.wisoft.prepair.interview.question.entity.enums.QuestionStatus;
+import io.wisoft.prepair.interview.common.exception.BusinessException;
+import io.wisoft.prepair.interview.common.exception.ErrorCode;
+import io.wisoft.prepair.interview.legacy.answer.repository.LegacyAnswerRepository;
+import io.wisoft.prepair.interview.legacy.answer.repository.FeedbackRepository;
+import io.wisoft.prepair.interview.legacy.repository.LegacyQuestionRepository;
+
+import java.time.LocalDate;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class AnswerPersistenceService {
+
+    private final LegacyQuestionRepository questionRepository;
+    private final LegacyAnswerRepository answerRepository;
+    private final FeedbackRepository feedbackRepository;
+    private final ObjectMapper objectMapper;
+
+    public AnswerSubmitResult saveAnswerAndFeedback(final UUID questionId, final UUID memberId, final String answerText, final FeedbackResult result, final FeedbackDetail detail) {
+        InterviewQuestion question = getQuestion(questionId, memberId);
+        question.updateStatus(QuestionStatus.ANSWERED);
+
+        // 답변 + 피드백 저장
+        InterviewAnswer answer = saveAnswer(answerText, question);
+        InterviewFeedback feedback = saveTextFeedback(result, detail, answer);
+
+        // 조건부 UPDATE로 최초 답변 여부 원자적 판단 (race condition 방지)
+        boolean firstAnswer = isFirstTodayAnswer(questionId, feedback.getScore());
+
+        // sendScore는 트랜잭션 외부에서 호출하므로 firstAnswer를 함께 반환
+        return new AnswerSubmitResult(feedback, firstAnswer);
+    }
+
+    public InterviewAnswer saveVideoAnswer(final UUID questionId, final UUID memberId) {
+        InterviewQuestion question = getQuestion(questionId, memberId);
+        question.updateStatus(QuestionStatus.ANSWERED);
+        return answerRepository.save(new InterviewAnswer(question, "", AnswerType.VIDEO, null));
+    }
+
+    public void updateMediaUrl(final UUID answerId, final String mediaUrl) {
+        InterviewAnswer interviewAnswer = getAnswer(answerId);
+        interviewAnswer.updateMediaUrl(mediaUrl);
+    }
+
+    public void updateAnswer(final UUID answerId, final String answer) {
+        InterviewAnswer interviewAnswer = getAnswer(answerId);
+        interviewAnswer.updateAnswer(answer);
+    }
+
+    public void saveVideoFeedback(final UUID answerId, final FeedbackResult result, final FeedbackDetail detail, final FeedbackType feedbackType) {
+        InterviewAnswer interviewAnswer = getAnswer(answerId);
+        feedbackRepository.save(new InterviewFeedback(interviewAnswer, serializeFeedback(detail), feedbackType, result.score()));
+    }
+
+    public void saveCombinedFeedback(final UUID answerId, final CombinedFeedbackResult result) {
+        InterviewAnswer interviewAnswer = getAnswer(answerId);
+        feedbackRepository.save(new InterviewFeedback(interviewAnswer, result.combineFeedback(), FeedbackType.COMBINED, result.score()));
+    }
+
+    private InterviewQuestion getQuestion(UUID questionId, UUID memberId) {
+        return questionRepository.findByIdAndMemberId(questionId, memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
+    }
+
+    private InterviewAnswer saveAnswer(String answer, InterviewQuestion question) {
+        return answerRepository.save(
+                new InterviewAnswer(question, answer, AnswerType.TEXT, null)
+        );
+    }
+
+    private InterviewFeedback saveTextFeedback(FeedbackResult result, FeedbackDetail detail, InterviewAnswer interviewAnswer) {
+        return feedbackRepository.save(
+                new InterviewFeedback(interviewAnswer, serializeFeedback(detail), FeedbackType.TEXT, result.score())
+        );
+    }
+
+    private boolean isFirstTodayAnswer(final UUID questionId, final Integer score) {
+        ZoneId zone = ZoneId.of("Asia/Seoul");
+        LocalDate today = LocalDate.now(zone);
+        Instant startOfDay = today.atStartOfDay(zone).toInstant();
+        Instant endOfDay = today.plusDays(1).atStartOfDay(zone).toInstant();
+        return questionRepository.updateLatestScoreIfFirstTime(questionId, score, startOfDay, endOfDay) > 0;
+    }
+
+    private InterviewAnswer getAnswer(UUID answerId) {
+        return answerRepository.findById(answerId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ANSWER_NOT_FOUND));
+    }
+
+    private String serializeFeedback(final FeedbackDetail detail) {
+        try {
+            return objectMapper.writeValueAsString(detail);
+        } catch (JsonProcessingException e) {
+            log.error("피드백 직렬화 실패", e);
+            throw new BusinessException(ErrorCode.INTERNAL_ERROR);
+        }
+    }
+}
+

@@ -8,8 +8,8 @@ import io.wisoft.prepair.interview.external.member.MemberServiceClient;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
 import io.wisoft.prepair.interview.external.member.dto.MemberProfile;
-import io.wisoft.prepair.interview.external.openai.OpenAiClient;
-import io.wisoft.prepair.interview.external.openai.dto.QuestionWithTags;
+import io.wisoft.prepair.interview.legacy.OpenAiClient;
+import io.wisoft.prepair.interview.legacy.dto.QuestionWithTags;
 import io.wisoft.prepair.interview.legacy.prompt.QuestionPromptBuilder;
 import io.wisoft.prepair.interview.legacy.repository.LegacyQuestionRepository;
 

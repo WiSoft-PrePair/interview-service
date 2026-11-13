@@ -42,7 +42,6 @@ public class QuestionAssigner {
 
         Job job = jobMatchReader.getJob(memberId);
 
-        //
         poolReader.pickUnassigned(job.getId(), memberId)
                 .ifPresentOrElse(
                         pool -> questionWriter.save(memberId, pool, today),

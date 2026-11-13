@@ -7,6 +7,7 @@ import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -57,8 +58,7 @@ public class OpenAiQuestionClient {
 
         List<GeneratedQuestion> validQuestions = questions.stream()
                 .filter(question -> question != null
-                        && question.question() != null
-                        && !question.question().isBlank()
+                        && StringUtils.hasText(question.question())
                         && question.questionTag() != null)
                 .map(question -> new GeneratedQuestion(
                         question.question().strip(),

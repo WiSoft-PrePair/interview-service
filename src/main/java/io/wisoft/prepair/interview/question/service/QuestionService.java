@@ -3,6 +3,7 @@ package io.wisoft.prepair.interview.question.service;
 import io.wisoft.prepair.interview.common.response.CursorResponse;
 import io.wisoft.prepair.interview.question.dto.TagCount;
 import io.wisoft.prepair.interview.question.dto.request.QuestionCursorRequest;
+import io.wisoft.prepair.interview.question.dto.response.QuestionDetail;
 import io.wisoft.prepair.interview.question.dto.response.QuestionPreview;
 import io.wisoft.prepair.interview.question.dto.response.TagCountResponse;
 import io.wisoft.prepair.interview.question.entity.Question;
@@ -48,7 +49,11 @@ public class QuestionService {
         return CursorResponse.of(contents, nextCursor, questions.hasNext());
     }
 
-    // 검색어: 대소문자·공백 무시, LIKE 특수문자(\ % _)는 글자 그대로 찾도록 이스케이프
+    public QuestionDetail getQuestion(UUID questionId, UUID memberId) {
+        Question question = questionReader.getQuestion(questionId, memberId);
+        return QuestionDetail.from(question);
+    }
+
     private String normalize(String keyword) {
         if (keyword == null || keyword.isBlank()) {
             return null;

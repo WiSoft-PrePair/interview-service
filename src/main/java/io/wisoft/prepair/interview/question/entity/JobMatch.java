@@ -1,6 +1,7 @@
 package io.wisoft.prepair.interview.question.entity;
 
 
+import io.wisoft.prepair.interview.common.support.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Getter
 @Table(name = "job_match")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class JobMatch {
+public class JobMatch extends BaseTimeEntity {
 
     @Id
     @Column(name = "member_id")

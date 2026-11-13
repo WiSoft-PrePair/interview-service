@@ -12,6 +12,7 @@ public record QuestionPreview(
         QuestionTag tag,
         String question,
         QuestionStatus status,
+        Integer bestScore,
         LocalDate assignedDate
 ) {
     public static QuestionPreview from(Question question) {
@@ -20,6 +21,7 @@ public record QuestionPreview(
                 question.getQuestionTag(),
                 question.getQuestion(),
                 question.getStatus(),
+                question.getBestScore(),
                 question.getAssignedDate()
         );
     }

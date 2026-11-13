@@ -51,6 +51,9 @@ public class Question extends BaseTimeEntity {
     @Column(nullable = false)
     private QuestionStatus status = QuestionStatus.UNANSWERED;
 
+    @Column(name = "best_score")
+    private Integer bestScore;
+
     @Column(name = "assigned_date", nullable = false)
     private LocalDate assignedDate;
 

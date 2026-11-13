@@ -1,5 +1,7 @@
 package io.wisoft.prepair.interview.question.service;
 
+import io.wisoft.prepair.interview.common.exception.BusinessException;
+import io.wisoft.prepair.interview.common.exception.ErrorCode;
 import io.wisoft.prepair.interview.question.dto.TagCount;
 import io.wisoft.prepair.interview.question.entity.Question;
 import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
@@ -29,6 +31,11 @@ public class QuestionReader {
 
     public List<TagCount> countByTag(UUID memberId) {
         return questionRepository.countByTag(memberId);
+    }
+
+    public Question getQuestion(UUID questionId, UUID memberId) {
+        return questionRepository.findOwned(questionId, memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
     }
 
 //    public QuestionResponse getQuestion(UUID questionId, UUID memberId) {

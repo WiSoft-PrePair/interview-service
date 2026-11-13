@@ -1,6 +1,6 @@
 package io.wisoft.prepair.interview.legacy.prompt;
 
-import io.wisoft.prepair.interview.answer.dto.internal.FinalFeedbackInput;
+import io.wisoft.prepair.interview.legacy.answer.dto.internal.FinalFeedbackInput;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

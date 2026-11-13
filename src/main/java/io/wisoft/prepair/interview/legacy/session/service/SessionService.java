@@ -3,11 +3,11 @@ package io.wisoft.prepair.interview.legacy.session.service;
 import io.wisoft.prepair.interview.legacy.entity.InterviewQuestion;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
-import io.wisoft.prepair.interview.answer.entity.FeedbackType;
-import io.wisoft.prepair.interview.answer.entity.InterviewAnswer;
-import io.wisoft.prepair.interview.answer.entity.InterviewFeedback;
-import io.wisoft.prepair.interview.answer.repository.AnswerRepository;
-import io.wisoft.prepair.interview.answer.repository.FeedbackRepository;
+import io.wisoft.prepair.interview.legacy.answer.entity.FeedbackType;
+import io.wisoft.prepair.interview.legacy.answer.entity.InterviewAnswer;
+import io.wisoft.prepair.interview.legacy.answer.entity.InterviewFeedback;
+import io.wisoft.prepair.interview.legacy.answer.repository.LegacyAnswerRepository;
+import io.wisoft.prepair.interview.legacy.answer.repository.FeedbackRepository;
 import io.wisoft.prepair.interview.legacy.repository.LegacyQuestionRepository;
 import io.wisoft.prepair.interview.legacy.session.dto.response.CreateSessionResponse;
 import io.wisoft.prepair.interview.legacy.session.dto.response.SessionDetailResponse;
@@ -32,7 +32,7 @@ public class SessionService {
 
     private final SessionRepository sessionRepository;
     private final LegacyQuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
+    private final LegacyAnswerRepository answerRepository;
     private final FeedbackRepository feedbackRepository;
 
     public List<SessionResponse> getSessionsByMember(UUID memberId) {

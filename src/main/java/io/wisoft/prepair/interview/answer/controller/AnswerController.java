@@ -1,10 +1,10 @@
 package io.wisoft.prepair.interview.answer.controller;
 
 import io.wisoft.prepair.interview.answer.dto.request.AnswerRequest;
-import io.wisoft.prepair.interview.answer.dto.response.FeedbackResponse;
+import io.wisoft.prepair.interview.legacy.answer.dto.response.FeedbackResponse;
 import io.wisoft.prepair.interview.common.response.ApiResponse;
-import io.wisoft.prepair.interview.answer.service.AnswerService;
-import io.wisoft.prepair.interview.answer.service.VideoAnswerSseService;
+import io.wisoft.prepair.interview.legacy.answer.service.LegacyAnswerService;
+import io.wisoft.prepair.interview.legacy.answer.service.VideoAnswerSseService;
 import jakarta.validation.Valid;
 
 import java.util.UUID;
@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequestMapping("/api/interviews/questions")
 public class AnswerController {
 
-    private final AnswerService answerService;
+    private final LegacyAnswerService answerService;
     private final VideoAnswerSseService videoAnswerStreamService;
 
     @PostMapping("/{questionId}/answers")

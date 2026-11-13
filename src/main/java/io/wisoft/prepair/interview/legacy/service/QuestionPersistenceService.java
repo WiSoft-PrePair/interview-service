@@ -3,7 +3,7 @@ package io.wisoft.prepair.interview.legacy.service;
 import io.wisoft.prepair.interview.legacy.entity.InterviewQuestion;
 import io.wisoft.prepair.interview.legacy.session.entity.InterviewSession;
 import io.wisoft.prepair.interview.legacy.entity.enums.QuestionType;
-import io.wisoft.prepair.interview.external.openai.dto.QuestionWithTags;
+import io.wisoft.prepair.interview.legacy.dto.QuestionWithTags;
 import io.wisoft.prepair.interview.legacy.repository.LegacyQuestionRepository;
 
 import java.util.UUID;

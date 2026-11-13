@@ -1,6 +1,0 @@
-package io.wisoft.prepair.interview.answer.dto.internal;
-
-public record FinalFeedbackResult(
-        String finalFeedback
-) {
-}

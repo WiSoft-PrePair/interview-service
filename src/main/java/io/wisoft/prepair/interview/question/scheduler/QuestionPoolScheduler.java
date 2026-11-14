@@ -17,7 +17,7 @@ public class QuestionPoolScheduler {
     private final JobMatcher jobMatcher;
 
     @Scheduled(cron = "0 0 6,7 * * *", zone = "Asia/Seoul")
-    @SchedulerLock(name = "prepareQuestionPool")
+    @SchedulerLock(name = "prepareQuestionPool", lockAtMostFor = "50m")
     public void prepare() {
         log.debug("질문 풀 생성 스케줄러 시작");
 

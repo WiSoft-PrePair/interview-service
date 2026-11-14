@@ -2,8 +2,8 @@ package io.wisoft.prepair.interview.answer.service;
 
 import io.wisoft.prepair.interview.answer.dto.response.AnswerDetail;
 import io.wisoft.prepair.interview.answer.entity.Answer;
-import io.wisoft.prepair.interview.external.openai.OpenAiFeedbackClient;
-import io.wisoft.prepair.interview.external.openai.OpenAiFeedbackClient.GeneratedFeedback;
+import io.wisoft.prepair.interview.external.openai.client.OpenAiFeedbackClient;
+import io.wisoft.prepair.interview.external.openai.dto.GeneratedFeedback;
 import io.wisoft.prepair.interview.question.entity.Question;
 import io.wisoft.prepair.interview.question.service.QuestionReader;
 import lombok.RequiredArgsConstructor;

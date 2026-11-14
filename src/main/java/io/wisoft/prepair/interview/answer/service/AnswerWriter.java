@@ -2,13 +2,12 @@ package io.wisoft.prepair.interview.answer.service;
 
 import io.wisoft.prepair.interview.answer.entity.Answer;
 import io.wisoft.prepair.interview.answer.repository.AnswerRepository;
+import io.wisoft.prepair.interview.external.openai.dto.GeneratedFeedback;
 import io.wisoft.prepair.interview.question.entity.Question;
 import io.wisoft.prepair.interview.question.service.QuestionWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import static io.wisoft.prepair.interview.external.openai.OpenAiFeedbackClient.*;
 
 @Component
 @Transactional

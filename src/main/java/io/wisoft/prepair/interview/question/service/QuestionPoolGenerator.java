@@ -1,9 +1,9 @@
 package io.wisoft.prepair.interview.question.service;
 
-import io.wisoft.prepair.interview.external.openai.OpenAiEmbeddingClient;
-import io.wisoft.prepair.interview.external.openai.OpenAiQuestionClient;
-import io.wisoft.prepair.interview.external.openai.OpenAiQuestionClient.GeneratedQuestion;
-import io.wisoft.prepair.interview.external.openai.OpenAiQuestionClient.ComparisonQuestion;
+import io.wisoft.prepair.interview.external.openai.client.OpenAiEmbeddingClient;
+import io.wisoft.prepair.interview.external.openai.client.OpenAiQuestionClient;
+import io.wisoft.prepair.interview.external.openai.dto.GeneratedQuestion;
+import io.wisoft.prepair.interview.external.openai.dto.ComparisonQuestion;
 import io.wisoft.prepair.interview.question.entity.Job;
 import io.wisoft.prepair.interview.question.entity.QuestionPool;
 import io.wisoft.prepair.interview.question.service.job.JobReader;

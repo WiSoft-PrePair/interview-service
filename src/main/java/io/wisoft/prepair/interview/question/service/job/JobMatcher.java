@@ -2,7 +2,7 @@ package io.wisoft.prepair.interview.question.service.job;
 
 import io.wisoft.prepair.interview.external.member.MemberServiceClient;
 import io.wisoft.prepair.interview.external.member.dto.MemberProfile;
-import io.wisoft.prepair.interview.external.openai.OpenAiEmbeddingClient;
+import io.wisoft.prepair.interview.external.openai.client.OpenAiEmbeddingClient;
 import io.wisoft.prepair.interview.question.entity.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

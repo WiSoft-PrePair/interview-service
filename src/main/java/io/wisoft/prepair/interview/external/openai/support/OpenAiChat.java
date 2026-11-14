@@ -1,6 +1,7 @@
 package io.wisoft.prepair.interview.external.openai.support;
 
 import com.openai.errors.OpenAIException;
+import com.openai.models.completions.CompletionUsage;
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
@@ -47,11 +48,12 @@ public class OpenAiChat {
 
         Usage usage = response.getMetadata().getUsage();
 
-        log.info("OpenAI 호출 완료: type={}, durationMs={}, inputTokens={}, outputTokens={}",
+        log.info("OpenAI 호출 완료: type={}, durationMs={}, inputTokens={}, outputTokens={}, reasoningTokens={}",
                 type,
                 TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start),
                 usage.getPromptTokens(),
-                usage.getCompletionTokens());
+                usage.getCompletionTokens(),
+                reasoningTokens(usage));
 
         return entity;
     }
@@ -84,5 +86,15 @@ public class OpenAiChat {
 
             throw new BusinessException(ErrorCode.OPENAI_INVALID_RESPONSE, e);
         }
+    }
+
+    // 추론 모델이 답변 전에 사용한 토큰 수, OpenAI 응답이 아니거나 값이 없으면 null
+    private Long reasoningTokens(Usage usage) {
+        if (usage.getNativeUsage() instanceof CompletionUsage nativeUsage) {
+            return nativeUsage.completionTokensDetails()
+                    .flatMap(CompletionUsage.CompletionTokensDetails::reasoningTokens)
+                    .orElse(null);
+        }
+        return null;
     }
 }

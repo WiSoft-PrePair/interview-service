@@ -31,12 +31,13 @@ public enum ErrorCode {
     FRAME_EXTRACTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "영상 프레임 추출에 실패했습니다."),
     STT_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "음성을 텍스트로 변환하지 못했습니다."),
 
-    // 외부 연동
+    // 외부 연동 (Member Service | OpenAI)
     MEMBER_SERVICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "회원 서비스 요청 처리 중 오류가 발생했습니다."),
     MEMBER_SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "회원 서비스에 연결할 수 없습니다."),
+
     OPENAI_API_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "AI 응답을 받지 못했습니다. 잠시 후 다시 시도해 주세요."),
     OPENAI_RESPONSE_PARSE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "OpenAI 응답을 읽을 수 없습니다."),
-    OPENAI_INVALID_RESPONSE(HttpStatus.INTERNAL_SERVER_ERROR, "OpenAI 응답이 유효하지 않습니다.");
+    OPENAI_INVALID_RESPONSE(HttpStatus.SERVICE_UNAVAILABLE, "AI 응답을 받지 못했습니다. 잠시 후 다시 시도해 주세요.");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -11,6 +11,7 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
+import tools.jackson.core.JacksonException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +56,7 @@ public class OpenAiChat {
         return entity;
     }
 
-    // 호출 종류별 타임아웃을 적용해 요청하고, 호출 실패는 OPENAI_API_ERROR로 바꿈
+    // 호출 종류별 타임아웃을 적용해 요청하고, 호출 실패는 OPENAI_API_ERROR, 응답 변환 실패는 OPENAI_INVALID_RESPONSE로 바꿈
     private <T> ResponseEntity<ChatResponse, T> request(
             CallType type, String system, String user, ParameterizedTypeReference<T> responseType, long start
     ) {
@@ -75,6 +76,13 @@ public class OpenAiChat {
                     e.getClass().getSimpleName());
 
             throw new BusinessException(ErrorCode.OPENAI_API_ERROR, e);
+
+        } catch (JacksonException e) {
+            log.warn("OpenAI 응답 변환 실패: type={}, durationMs={}",
+                    type,
+                    TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start));
+
+            throw new BusinessException(ErrorCode.OPENAI_INVALID_RESPONSE, e);
         }
     }
 }

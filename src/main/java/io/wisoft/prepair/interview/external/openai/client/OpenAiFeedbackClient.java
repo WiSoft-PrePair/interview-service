@@ -1,30 +1,33 @@
-package io.wisoft.prepair.interview.external.openai;
+package io.wisoft.prepair.interview.external.openai.client;
 
 import io.wisoft.prepair.interview.common.exception.BusinessException;
 import io.wisoft.prepair.interview.common.exception.ErrorCode;
+import io.wisoft.prepair.interview.external.openai.dto.GeneratedFeedback;
 import io.wisoft.prepair.interview.external.openai.prompt.FeedbackPrompt;
+import io.wisoft.prepair.interview.external.openai.support.CallType;
+import io.wisoft.prepair.interview.external.openai.support.OpenAiChat;
 import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
-import org.springframework.ai.chat.client.ChatClient;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class OpenAiFeedbackClient {
 
-    private final ChatClient chatClient;
+    private final OpenAiChat openAiChat;
     private final FeedbackPrompt feedbackPrompt;
 
-    public OpenAiFeedbackClient(ChatClient.Builder builder, FeedbackPrompt feedbackPrompt) {
-        this.chatClient = builder.build();
-        this.feedbackPrompt = feedbackPrompt;
-    }
-
     public GeneratedFeedback generate(QuestionTag tag, String question, String answer) {
-        GeneratedFeedback feedback = chatClient.prompt()
-                .system(feedbackPrompt.system())
-                .user(feedbackPrompt.user(tag, question, answer))
-                .call()
-                .entity(GeneratedFeedback.class);
+        GeneratedFeedback feedback = openAiChat.call(
+                CallType.FEEDBACK,
+                feedbackPrompt.system(),
+                feedbackPrompt.user(tag, question, answer),
+                new ParameterizedTypeReference<>() {
+                });
 
         validate(feedback);
         return strip(feedback);
@@ -32,8 +35,7 @@ public class OpenAiFeedbackClient {
 
     // 평가 결과 검증 | 점수 범위와 피드백 문구가 모두 있는지 확인
     private void validate(GeneratedFeedback feedback) {
-        boolean invalid = feedback == null
-                || feedback.score() == null
+        boolean invalid = feedback.score() == null
                 || feedback.score() < 0 || feedback.score() > 100
                 || !StringUtils.hasText(feedback.good())
                 || !StringUtils.hasText(feedback.improvement())
@@ -41,6 +43,7 @@ public class OpenAiFeedbackClient {
                 || !StringUtils.hasText(feedback.summary());
 
         if (invalid) {
+            log.warn("OpenAI 피드백 응답 검증 실패: {}", feedback);
             throw new BusinessException(ErrorCode.OPENAI_INVALID_RESPONSE);
         }
     }
@@ -53,15 +56,5 @@ public class OpenAiFeedbackClient {
                 feedback.summary().strip(),
                 feedback.score()
         );
-    }
-
-    // 평가 근거를 먼저 작성한 뒤 점수를 매기도록 score를 마지막에 둠
-    public record GeneratedFeedback(
-            String good,
-            String improvement,
-            String example,
-            String summary,
-            Integer score
-    ) {
     }
 }

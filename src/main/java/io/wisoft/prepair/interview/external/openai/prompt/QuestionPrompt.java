@@ -1,6 +1,6 @@
 package io.wisoft.prepair.interview.external.openai.prompt;
 
-import io.wisoft.prepair.interview.external.openai.OpenAiQuestionClient.ComparisonQuestion;
+import io.wisoft.prepair.interview.external.openai.dto.ComparisonQuestion;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

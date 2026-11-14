@@ -29,8 +29,18 @@ spring:
       embedding:
         model: text-embedding-3-small
         dimensions: 1536
+        max-retries: 1 # 재시도는 SDK 클라이언트 단위로만 적용됨
       chat:
         model: gpt-6-luna
+        max-retries: 1
+
+### OpenAI 호출별 타임아웃 ###
+openai:
+  timeouts:
+    embedding: 30s
+    question: 120s
+    compare: 120s
+    feedback: 20s
 
 ### 외부 서비스 (멤버·OpenAI) ###
 external:

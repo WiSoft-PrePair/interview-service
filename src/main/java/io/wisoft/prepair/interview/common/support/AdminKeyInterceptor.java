@@ -19,7 +19,12 @@ public class AdminKeyInterceptor implements HandlerInterceptor {
 
     private final byte[] adminKey;
 
+    // 키가 비어 있으면 빈 헤더 요청이 통과하므로 앱 시작을 막음
     public AdminKeyInterceptor(@Value("${admin.api-key}") String adminKey) {
+        if (adminKey == null || adminKey.isBlank()) {
+            throw new IllegalStateException("admin.api-key(X_ADMIN_KEY)가 비어 있습니다.");
+        }
+
         this.adminKey = adminKey.getBytes(StandardCharsets.UTF_8);
     }
 

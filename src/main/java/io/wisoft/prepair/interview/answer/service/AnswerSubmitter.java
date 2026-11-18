@@ -21,8 +21,12 @@ public class AnswerSubmitter {
 
     public AnswerDetail submit(UUID questionId, UUID memberId, String answer) {
         Question question = questionReader.getQuestion(questionId, memberId);
+
         GeneratedFeedback feedback = feedbackClient.generate(
-                question.getQuestionTag(), question.getQuestion(), answer);
+                question.getQuestionTag(),
+                question.getQuestion(),
+                answer
+        );
 
         Answer result = answerWriter.save(question, answer, feedback);
 

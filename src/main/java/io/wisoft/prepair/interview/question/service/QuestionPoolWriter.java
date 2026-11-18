@@ -1,7 +1,7 @@
 package io.wisoft.prepair.interview.question.service;
 
 import io.wisoft.prepair.interview.external.openai.dto.GeneratedQuestion;
-import io.wisoft.prepair.interview.question.entity.Job;
+import io.wisoft.prepair.interview.question.entity.enums.Job;
 import io.wisoft.prepair.interview.question.entity.QuestionPool;
 import io.wisoft.prepair.interview.question.repository.QuestionPoolRepository;
 import lombok.RequiredArgsConstructor;

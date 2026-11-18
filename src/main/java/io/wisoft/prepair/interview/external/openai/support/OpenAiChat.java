@@ -21,11 +21,9 @@ import java.util.concurrent.TimeUnit;
 public class OpenAiChat {
 
     private final ChatClient chatClient;
-    private final OpenAiProperties properties;
 
-    public OpenAiChat(ChatClient.Builder builder, OpenAiProperties properties) {
+    public OpenAiChat(ChatClient.Builder builder) {
         this.chatClient = builder.build();
-        this.properties = properties;
     }
 
     public <T> T call(CallType type, String system, String user, ParameterizedTypeReference<T> responseType) {
@@ -58,18 +56,16 @@ public class OpenAiChat {
         return entity;
     }
 
-    // 호출 종류별 타임아웃을 적용해 요청하고, 호출 실패는 OPENAI_API_ERROR, 응답 변환 실패는 OPENAI_INVALID_RESPONSE로 바꿈
     private <T> ResponseEntity<ChatResponse, T> request(
             CallType type, String system, String user, ParameterizedTypeReference<T> responseType, long start
     ) {
         try {
             return chatClient.prompt()
-                    .options(OpenAiChatOptions.builder()
-                            .timeout(properties.timeouts().get(type)))
+                    .options(OpenAiChatOptions.builder().timeout(type.getTimeout()))
                     .system(system)
                     .user(user)
                     .call()
-                    .responseEntity(responseType);
+                    .responseEntity(responseType, ChatClient.EntityParamSpec::useProviderStructuredOutput);
 
         } catch (OpenAIException e) {
             log.warn("OpenAI 호출 실패: type={}, durationMs={}, error={}",

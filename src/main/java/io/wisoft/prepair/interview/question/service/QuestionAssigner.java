@@ -2,8 +2,7 @@ package io.wisoft.prepair.interview.question.service;
 
 import io.wisoft.prepair.interview.external.member.MemberServiceClient;
 import io.wisoft.prepair.interview.external.member.dto.MemberProfile;
-import io.wisoft.prepair.interview.question.entity.Job;
-import io.wisoft.prepair.interview.question.service.job.JobMatchReader;
+import io.wisoft.prepair.interview.question.entity.enums.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,6 @@ public class QuestionAssigner {
     private final MemberServiceClient memberClient;
     private final QuestionWriter questionWriter;
     private final QuestionReader questionReader;
-    private final JobMatchReader jobMatchReader;
     private final QuestionPoolReader poolReader;
 
     public void execute() {
@@ -29,7 +27,7 @@ public class QuestionAssigner {
 
         for (MemberProfile member : getMembers()) {
             try {
-                assign(member.id(), today);
+                assign(member, today);
             } catch (Exception e) {
                 log.error("질문 배정 실패: memberId={}", member.id(), e);
             }
@@ -37,15 +35,17 @@ public class QuestionAssigner {
     }
 
     // 회원별 질문 배정 · 같은 날짜에는 한 번만 배정
-    private void assign(UUID memberId, LocalDate today) {
+    private void assign(MemberProfile member, LocalDate today) {
+        UUID memberId = member.id();
+
         if (questionReader.isAssigned(memberId, today)) return;
 
-        Job job = jobMatchReader.getJob(memberId);
+        Job job = Job.valueOf(member.job());
 
-        poolReader.pickUnassigned(job.getId(), memberId)
+        poolReader.pickUnassigned(job, memberId)
                 .ifPresentOrElse(
                         pool -> questionWriter.save(memberId, pool, today),
-                        () -> log.warn("질문 배정 후보 없음: memberId={}, jobId={}", memberId, job.getId())
+                        () -> log.warn("질문 배정 후보 없음: memberId={}, job={}", memberId, job)
                 );
     }
 

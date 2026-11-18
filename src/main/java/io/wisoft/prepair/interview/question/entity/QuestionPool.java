@@ -1,6 +1,7 @@
 package io.wisoft.prepair.interview.question.entity;
 
 import io.wisoft.prepair.interview.common.support.BaseTimeEntity;
+import io.wisoft.prepair.interview.question.entity.enums.Job;
 import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,8 +23,8 @@ public class QuestionPool extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "job_id", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Job job;
 
     @Column(nullable = false, columnDefinition = "TEXT")

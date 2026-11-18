@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class QuestionScheduler {
+public class QuestionAssignScheduler {
 
     private final QuestionAssigner questionAssigner;
 
-    @Scheduled(cron = "0 0 8 * * *", zone = "Asia/Seoul")
+//    @Scheduled(cron = "0 0 8 * * *", zone = "Asia/Seoul")
     @SchedulerLock(name = "assignQuestions")
     public void assign() {
         log.debug("질문 배정 스케줄러 시작");

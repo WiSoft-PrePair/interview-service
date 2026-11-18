@@ -5,6 +5,7 @@ import io.wisoft.prepair.interview.question.dto.TagCount;
 import io.wisoft.prepair.interview.question.dto.request.QuestionCursorRequest;
 import io.wisoft.prepair.interview.question.dto.response.QuestionDetail;
 import io.wisoft.prepair.interview.question.dto.response.QuestionPreview;
+import io.wisoft.prepair.interview.question.dto.response.QuestionQuota;
 import io.wisoft.prepair.interview.question.dto.response.TagCountResponse;
 import io.wisoft.prepair.interview.question.entity.Question;
 import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
@@ -14,7 +15,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
@@ -42,8 +45,8 @@ public class QuestionService {
                 .map(QuestionPreview::from)
                 .toList();
 
-        LocalDate nextCursor = questions.hasNext()
-                ? questions.getContent().getLast().getAssignedDate()
+        Instant nextCursor = questions.hasNext()
+                ? questions.getContent().getLast().getCreatedAt()
                 : null;
 
         return CursorResponse.of(contents, nextCursor, questions.hasNext());
@@ -53,6 +56,7 @@ public class QuestionService {
         Question question = questionReader.getQuestion(questionId, memberId);
         return QuestionDetail.from(question);
     }
+
 
     private String normalize(String keyword) {
         if (keyword == null || keyword.isBlank()) {
@@ -84,5 +88,14 @@ public class QuestionService {
                 .sum();
 
         return TagCountResponse.of(total, counts);
+    }
+
+    public QuestionQuota getQuota(UUID memberId) {
+        int used = questionReader.countToday(
+                memberId,
+                LocalDate.now(ZoneId.of("Asia/Seoul"))
+        );
+
+        return QuestionQuota.of(used, Question.DAILY_LIMIT, Question.DAILY_LIMIT - used);
     }
 }

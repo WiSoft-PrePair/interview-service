@@ -16,6 +16,9 @@ external:
   openai:
     api-key: test-openai-key
 
+admin:
+  api-key: test-admin-key
+
 cloud:
   aws:
     s3:

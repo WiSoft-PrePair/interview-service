@@ -49,6 +49,10 @@ external:
     whisper-url: https://api.openai.com/v1/audio/transcriptions
     whisper-model: whisper-1
 
+### 관리자 API (/api/interviews/admin/**) ###
+admin:
+  api-key: ${X_ADMIN_KEY} # 요청 헤더 X-Admin-Key와 비교
+
 ### AWS (S3·CloudFront) ###
 cloud:
   aws:

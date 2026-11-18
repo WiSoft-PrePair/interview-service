@@ -2,6 +2,7 @@ package io.wisoft.prepair.interview.question.repository;
 
 import io.wisoft.prepair.interview.question.entity.QuestionPool;
 import io.wisoft.prepair.interview.question.entity.enums.Job;
+import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,6 +31,7 @@ public interface QuestionPoolRepository extends JpaRepository<QuestionPool, UUID
             SELECT pool
             FROM QuestionPool pool
             WHERE pool.job = :job
+                AND pool.questionTag = :tag
                 AND NOT EXISTS (
                     SELECT 1
                     FROM Question q
@@ -39,5 +41,6 @@ public interface QuestionPoolRepository extends JpaRepository<QuestionPool, UUID
             LIMIT 1
             """)
     Optional<QuestionPool> pickUnassigned(@Param("job") Job job,
+                                          @Param("tag") QuestionTag tag,
                                           @Param("memberId") UUID memberId);
 }

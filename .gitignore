@@ -39,6 +39,7 @@ bin/
 
 # Environment
 .env
+eval/question/.env
 
 # Database
 postgres-data/

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -21,11 +22,11 @@ public class QuestionReader {
 
     private final QuestionRepository questionRepository;
 
-    public boolean isAssigned(UUID memberId, LocalDate today) {
-        return questionRepository.isAssigned(memberId, today);
+    public int countToday(UUID memberId, LocalDate today) {
+        return questionRepository.countToday(memberId, today);
     }
 
-    public Slice<Question> getQuestions(UUID memberId, QuestionTag tag, String keyword, LocalDate cursor, Pageable pageable) {
+    public Slice<Question> getQuestions(UUID memberId, QuestionTag tag, String keyword, Instant cursor, Pageable pageable) {
         return questionRepository.findHistory(memberId, tag, keyword, cursor, pageable);
     }
 

@@ -20,13 +20,13 @@ import java.util.UUID;
 public interface QuestionRepository extends JpaRepository<Question, UUID> {
 
     @Query("""
-            SELECT COUNT(q) > 0
+            SELECT COUNT(q)
             FROM Question q
             WHERE q.memberId = :memberId
                 AND q.assignedDate = :today
             """)
-    boolean isAssigned(@Param("memberId") UUID memberId,
-                       @Param("today") LocalDate today);
+    int countToday(@Param("memberId") UUID memberId,
+                   @Param("today") LocalDate today);
 
     @Query("""
             SELECT q
@@ -34,13 +34,13 @@ public interface QuestionRepository extends JpaRepository<Question, UUID> {
             WHERE q.memberId = :memberId
                 AND q.questionTag = COALESCE(:tag, q.questionTag)
                 AND LOWER(REPLACE(q.question, ' ', '')) LIKE CONCAT('%', COALESCE(:keyword, ''), '%') ESCAPE '\\'
-                AND (CAST(:cursor AS LocalDate) IS NULL OR q.assignedDate < :cursor)
-            ORDER BY q.assignedDate DESC
+                AND (CAST(:cursor AS Instant) IS NULL OR q.createdAt < :cursor)
+            ORDER BY q.createdAt DESC
             """)
     Slice<Question> findHistory(@Param("memberId") UUID memberId,
                                 @Param("tag") QuestionTag tag,
                                 @Param("keyword") String keyword,
-                                @Param("cursor") LocalDate cursor,
+                                @Param("cursor") Instant cursor,
                                 Pageable pageable);
 
     @Query("""

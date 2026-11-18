@@ -6,11 +6,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 public record QuestionCursorRequest(
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        LocalDate cursor,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        Instant cursor, // 이전 페이지 마지막 질문의 생성 시각
 
         @Min(value = 1, message = "페이지 크기는 1 이상이어야 합니다.")
         @Max(value = 20, message = "페이지 크기는 20 이하여야 합니다.")

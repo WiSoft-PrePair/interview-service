@@ -21,6 +21,10 @@ public enum ErrorCode {
     // 면접
     JOB_MATCH_NOT_FOUND(HttpStatus.NOT_FOUND, "회원의 직무 매핑을 찾을 수 없습니다."),
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "질문을 찾을 수 없습니다."),
+    JOB_NOT_SET(HttpStatus.BAD_REQUEST, "직무를 먼저 설정해 주세요."),
+    DAILY_LIMIT_EXCEEDED(HttpStatus.CONFLICT, "오늘 받을 수 있는 질문을 모두 받았습니다."),
+    QUESTION_POOL_EXHAUSTED(HttpStatus.CONFLICT, "이 카테고리에 남은 질문이 없습니다."),
+    QUESTION_ASSIGN_CONFLICT(HttpStatus.CONFLICT, "요청이 겹쳤습니다. 잠시 후 다시 시도해 주세요."),
     ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "답변을 찾을 수 없습니다."),
     SESSION_NOT_FOUND(HttpStatus.NOT_FOUND, "면접 세션을 찾을 수 없습니다."),
     SESSION_NOT_FINISHED(HttpStatus.BAD_REQUEST, "아직 종료되지 않은 면접 세션입니다."),

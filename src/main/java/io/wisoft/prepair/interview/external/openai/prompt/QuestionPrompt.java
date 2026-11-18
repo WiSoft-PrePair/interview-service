@@ -1,6 +1,7 @@
 package io.wisoft.prepair.interview.external.openai.prompt;
 
 import io.wisoft.prepair.interview.external.openai.dto.ComparisonQuestion;
+import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,19 +24,17 @@ public class QuestionPrompt {
                 - 질문의 난이도는 낮추지 마세요.
                 - 특정 회사나 경력을 가정하지 마세요.
                 
-                [분류] 질문마다 하나를 지정하세요.
-                  JOB: 직무 지식과 문제 해결
-                  COLLABORATION: 협업과 의사소통
-                  EXPERIENCE: 경험과 배운 점
-                  CULTURE_FIT: 업무 가치관과 일하는 방식
-                  AI: AI 도구 활용과 AI와 함께 일하는 방식
-                - 경험을 묻는 질문은 내용이 직무 지식이어도 EXPERIENCE입니다.
-                - AI 기술 지식 자체를 묻는 질문은 JOB입니다.
-                
+                [분류] 요청한 분류에 맞는 질문만 쓰세요.
+                - JOB: 직무 지식으로 상황을 판단하고 문제를 해결하는 질문. 지원자의 경험은 묻지 않습니다.
+                - COLLABORATION: 동료, 다른 직군과 협업하고 의견을 조율하는 질문
+                - EXPERIENCE: 지원자 자신의 프로젝트나 학습 경험과 그 판단 근거를 묻는 질문
+                - CULTURE_FIT: 업무 가치관과 일하는 방식을 구체적인 상황으로 묻는 질문
+                - AI: AI 도구를 활용하고 그 결과를 검증하는 방식을 묻는 질문. AI 기술 지식 자체는 묻지 않습니다.
+
                 [작성 규칙]
                 - 한국어로 작성하세요.
                 - 요청한 개수만큼 질문을 작성하세요.
-                - 모든 분류에서 해당 직무의 맥락을 반영하세요.
+                - 어느 분류든 해당 직무의 맥락을 반영하세요.
 
                 [다양성] 이번에 작성하는 질문끼리 서로 겹치지 않게 하세요.
                 - 핵심 답변이나 평가 의도가 같은 질문을 두 번 쓰지 마세요. 같은 내용을 표현만 바꿔 다시 묻는 것도 중복입니다.
@@ -44,9 +43,9 @@ public class QuestionPrompt {
                 """;
     }
 
-    public String generateUser(String job, int count) {
-        return "%s 직무의 면접 질문을 %d개 작성하세요."
-                .formatted(job, count);
+    public String generateUser(String job, QuestionTag tag, int count) {
+        return "%s 직무의 %s 분류 면접 질문을 %d개 작성하세요."
+                .formatted(job, tag, count);
     }
 
     public String compareSystem() {

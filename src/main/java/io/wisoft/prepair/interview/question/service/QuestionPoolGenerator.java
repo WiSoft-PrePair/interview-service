@@ -6,8 +6,10 @@ import io.wisoft.prepair.interview.external.openai.dto.GeneratedQuestion;
 import io.wisoft.prepair.interview.external.openai.dto.ComparisonQuestion;
 import io.wisoft.prepair.interview.question.entity.enums.Job;
 import io.wisoft.prepair.interview.question.entity.QuestionPool;
+import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,40 +22,48 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class QuestionPoolGenerator {
 
-    // 중복 판정 후보 | 유사도 0.4 이상인 기존 질문을 최대 5개 LLM에 보냄 (최종 판정은 LLM)
     private static final double CANDIDATE_MIN_SIMILARITY = 0.4;
     private static final int CANDIDATE_LIMIT = 5;
 
     private final OpenAiQuestionClient questionClient;
     private final OpenAiEmbeddingClient embeddingClient;
-
     private final QuestionPoolReader poolReader;
     private final QuestionPoolWriter poolWriter;
 
-    // 전체 직무 생성 | 실패한 직무는 로그만 남기고 다음 직무로
-    public void execute(int count) {
+    // 백그라운드 생성 | job이 없으면 전체 직무, 직무마다 분류별로 countPerTag개씩. 실패한 조합은 로그만 남기고 다음으로
+    @Async("questionPoolExecutor")
+    public void execute(Job job, int countPerTag) {
         long startedAt = System.nanoTime();
+        List<Job> jobs = job == null ? List.of(Job.values()) : List.of(job);
 
-        for (Job job : Job.values()) {
-            try {
-                generate(job, count);
-            } catch (Exception e) {
-                log.error("질문 풀 생성 실패: job={}", job, e);
+        for (Job target : jobs) {
+            for (QuestionTag tag : QuestionTag.values()) {
+                try {
+                    generate(target, tag, countPerTag);
+                } catch (Exception e) {
+                    log.error("질문 풀 생성 실패: job={}, tag={}", target, tag, e);
+                }
             }
         }
 
         long durationMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startedAt);
-        log.info("질문 풀 생성 완료: durationMs={}", durationMs);
+        log.info("질문 풀 생성 완료: jobs={}, countPerTag={}, durationMs={}", jobs.size(), countPerTag, durationMs);
     }
 
-    // 직무 하나 생성 | 질문 생성 → 각 질문 임베딩(01) → 유사한 기존 질문 조회(02) → LLM 중복 판정(03) → 중복 제외 후 저장
-    public void generate(Job job, int count) {
-        List<GeneratedQuestion> questions = questionClient.generate(job.getTitle(), count);
+    // 직무·분류 하나 생성 | 질문 생성 → 각 질문 임베딩(01) → 유사한 기존 질문 조회(02) → LLM 중복 판정(03) → 중복 제외 후 저장
+    private void generate(Job job, QuestionTag tag, int count) {
+        List<GeneratedQuestion> questions = questionClient.generate(
+                job.getTitle(),
+                tag,
+                count
+        );
+
         List<float[]> embeddings = embedQuestions(questions);
+
         List<ComparisonQuestion> comparisons = getComparisons(job, questions, embeddings);
         Set<Integer> duplicateIndexes = compareQuestions(comparisons);
 
-        poolWriter.save(job, questions, embeddings, duplicateIndexes);
+        poolWriter.save(job, tag, questions, embeddings, duplicateIndexes);
     }
 
     // 01. 임베딩 생성 | 새 질문들을 한 번에 벡터로 변환

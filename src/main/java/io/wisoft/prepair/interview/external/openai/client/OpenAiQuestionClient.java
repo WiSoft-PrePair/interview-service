@@ -9,6 +9,7 @@ import io.wisoft.prepair.interview.external.openai.dto.GeneratedQuestionList;
 import io.wisoft.prepair.interview.external.openai.prompt.QuestionPrompt;
 import io.wisoft.prepair.interview.external.openai.support.CallType;
 import io.wisoft.prepair.interview.external.openai.support.OpenAiChat;
+import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,11 +28,11 @@ public class OpenAiQuestionClient {
     private final OpenAiChat openAiChat;
     private final QuestionPrompt questionPrompt;
 
-    public List<GeneratedQuestion> generate(String job, int count) {
+    public List<GeneratedQuestion> generate(String job, QuestionTag tag, int count) {
         GeneratedQuestionList response = openAiChat.call(
                 CallType.QUESTION,
                 questionPrompt.generateSystem(),
-                questionPrompt.generateUser(job, count),
+                questionPrompt.generateUser(job, tag, count),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -52,9 +53,7 @@ public class OpenAiQuestionClient {
     private List<GeneratedQuestion> validate(List<GeneratedQuestion> questions) {
         List<GeneratedQuestion> validQuestions = questions.stream()
                 .filter(question -> StringUtils.hasText(question.question()))
-                .map(question -> new GeneratedQuestion(
-                        question.question().strip(),
-                        question.questionTag()))
+                .map(question -> new GeneratedQuestion(question.question().strip()))
                 .toList();
 
         if (validQuestions.size() < questions.size()) {

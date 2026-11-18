@@ -2,6 +2,7 @@ package io.wisoft.prepair.interview.question.service;
 
 import io.wisoft.prepair.interview.external.openai.dto.GeneratedQuestion;
 import io.wisoft.prepair.interview.question.entity.enums.Job;
+import io.wisoft.prepair.interview.question.entity.enums.QuestionTag;
 import io.wisoft.prepair.interview.question.entity.QuestionPool;
 import io.wisoft.prepair.interview.question.repository.QuestionPoolRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class QuestionPoolWriter {
 
     private final QuestionPoolRepository poolRepository;
 
-    public void save(Job job, List<GeneratedQuestion> questions, List<float[]> embeddings, Set<Integer> duplicateIndexes) {
+    public void save(Job job, QuestionTag tag, List<GeneratedQuestion> questions, List<float[]> embeddings, Set<Integer> duplicateIndexes) {
         List<QuestionPool> pools = new ArrayList<>();
 
         for (int i = 0; i < questions.size(); i++) {
@@ -26,7 +27,7 @@ public class QuestionPoolWriter {
             pools.add(new QuestionPool(
                     job,
                     questions.get(i).question(),
-                    questions.get(i).questionTag(),
+                    tag,
                     embeddings.get(i)
             ));
         }

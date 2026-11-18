@@ -15,6 +15,7 @@ public class QuestionAssignScheduler {
 
     private final QuestionAssigner questionAssigner;
 
+    // 질문 풀 시드 구성 전까지 비활성 (켤 때: 매일 8시 배정)
 //    @Scheduled(cron = "0 0 8 * * *", zone = "Asia/Seoul")
     @SchedulerLock(name = "assignQuestions")
     public void assign() {
